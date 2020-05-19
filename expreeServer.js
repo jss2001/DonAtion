@@ -3,6 +3,7 @@ const app = express()
 const path = require('path')
 var request = require('request')
 var mysql      = require('mysql');
+var jwt = require('jsonwebtoken')
 const DATE_FORMATER = require( 'dateformat' );
 
 
@@ -25,7 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));//ajax로 데이터 전송하는 것을 허용s
 
 // root 라우터
-app.get('/', function (req, res) {
+app.get('/main', function (req, res) {
     res.render('index');
 })
 
@@ -61,10 +62,57 @@ app.post('/signup', function(req, res){
 })
 
 
-//로그인
+//로그인 창
 app.get('/login', function(req, res){
     res.render('login');
 })
+
+
+//로그인 요청
+app.post('/login', function(req, res){
+    var userEmail = req.body.userEmail;
+    var userPassword = req.body.userPassword;
+    var sql = "SELECT * FROM user WHERE email=?";
+    connection.query(sql, [userEmail], function(err, result){
+        if(err){
+            console.error(err);
+            res.json(0);
+            throw err;
+        }
+        else{
+            if(result.length == 0){
+            res.json(3);
+            }
+            else{
+                var dbPassword = result[0].password;
+                if(dbPassword == userPassword){
+                    var tokenKey = "f@i#n%tne#ckfhlafkd0102test!@#%"
+                    jwt.sign(
+                    {
+                        userId : result[0].id,
+                        userEmail : result[0].user_email
+                    },
+                    tokenKey,
+                    {
+                        expiresIn : '10d',
+                        issuer : 'fintech.admin',
+                        subject : 'user.login.info'
+                    },
+                    function(err, token){
+                        console.log('로그인 성공', token)
+                        res.json(token)
+                    }
+                    )
+                }
+                else{
+                    res.json(2);
+                }
+            }
+        }
+    })
+
+})
+
 
 app.get('/authResult',function(req, res){
     var authCode = req.query.code;
