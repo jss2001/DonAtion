@@ -8,10 +8,10 @@ const DATE_FORMATER = require( 'dateformat' );
 
 
 var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '0525',
-  database : 'fintech'
+  host     : 'DB-hostname을 입력해주세요',
+  user     : 'fintech',
+  password : 'DB-password를 입력해주세요',
+  database : 'donation'
 });
  
 connection.connect();
@@ -23,12 +23,16 @@ app.set('view engine', 'ejs'); //select view template engine
 
 app.use(express.static(path.join(__dirname, 'public'))); // to use static asset (design)
 app.use(express.json());
-app.use(express.urlencoded({extended:false}));//ajax로 데이터 전송하는 것을 허용s
+app.use(express.urlencoded({extended:false}));//ajax로 데이터 전송하는 것을 허용
 
 // root 라우터
 app.get('/main', function (req, res) {
     res.render('index');
 })
+
+
+
+//------------------ 회원가입/로그인/인증 ------------------//
 
 //회원가입 창
 app.get('/signup', function(req, res){
@@ -45,7 +49,7 @@ app.post('/signup', function(req, res){
     var userRefreshToken = req.body.userRefreshToken;
     var userSeqNo = req.body.userSeqNo; 
     console.log(userName, userAccessToken, userSeqNo);
-    var sql = "INSERT INTO fintech.user (name, email, password, accesstoken, refreshtoken, userseqno) VALUES (?,?,?,?,?,?)";
+    var sql = "INSERT INTO donation.user (name, email, password, accesstoken, refreshtoken, userseqno) VALUES (?,?,?,?,?,?)";
     connection.query(sql, 
         [userName, userEmail, userPassword, userAccessToken, userRefreshToken, userSeqNo],
         function(err, result){
@@ -114,6 +118,7 @@ app.post('/login', function(req, res){
 })
 
 
+// 사용자 인증 요청
 app.get('/authResult',function(req, res){
     var authCode = req.query.code;
     console.log(authCode);
@@ -144,6 +149,37 @@ app.get('/authResult',function(req, res){
     })
 })
 
+
+
+//------------------ 더치페이 요청 ------------------//
+
+// dutchRequest : 더치페이 요청 페이지
+app.get('/dutchRequest', function(req, res) {
+    res.render('dutchRequest');
+})
+
+// searchPeer: 사용자 정보 검색
+app.post('/searchPeer', function(req, res) {
+    var keyword = '%' + req.body.keyword + '%'
+    console.log(req.body.keyword);
+
+    var sql = "SELECT * FROM user WHERE name LIKE ?";
+    connection.query(sql, [keyword], function(err, result) {
+        if(err) {
+            console.error(err);
+            throw err;
+        }
+        else {
+            console.log(result);
+            res.json(result);
+
+        }
+    })
+})
+
+
+
+//------------------ 기부처 관련 정보 ------------------//
 
 //기부리스트
 app.get('/charityList', function(req, res) {
@@ -184,5 +220,6 @@ app.get('/charityDetail/:charityid', function(req, res) {
         }
     })
 })
+
 
 app.listen(3000);

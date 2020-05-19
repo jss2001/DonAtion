@@ -1,0 +1,331 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>더치페이 요청하기</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="index.html" class="logo"><strong>DonAtion</strong> 생활 속 기부 플랫폼</a>
+									<ul class="icons">
+										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+										<li><a href="#" class="icon brands fa-snapchat-ghost"><span class="label">Snapchat</span></a></li>
+										<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+										<li><a href="#" class="icon brands fa-medium-m"><span class="label">Medium</span></a></li>
+									</ul>
+								</header>
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>더치페이 요청하기</h1>
+									</header>
+
+									    <!-- Content -->
+                                        <h2 id="content">금액을 입력해주세요</h2>
+                                        <div class="col-12">
+                                            <div class="col-6 col-12-xsmall">
+                                                <input type="text" name="demo-name" id='totalAmount' value="" placeholder="더치페이 할 금액을 입력해주세요" />
+                                            </div>
+                                        </div>
+                                        
+                                        <br><br>
+
+                                        
+                                        <!-- 더치페이 할 친구 선택 -->
+                                        <div class="col-12">
+                                            <h2 id="content">더치페이 할 친구 선택</h2>
+                                            <section id="search" class="alt">
+                                            
+                                                <form onsubmit="onSearch();">
+                                                    <input type="text" name="query" id='keywordInput' placeholder="Search"/>
+                                                </form>
+                                            <!--
+                                                <input type="text" name="query" id='keywordInput' placeholder="Search"/>
+                                            -->    
+                                            </section>
+                                        </div>
+
+
+                                        <!-- 임시버튼 -->
+                                        <button id='addPeer'>+</button>
+
+
+                                        <div class="table-wrapper">
+                                                <table id='peerTable'>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Email</th>
+                                                            <th>Price</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Name1</td>
+                                                            <td>test@test.com</td>
+                                                            <td>29.99</td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="2"></td>
+                                                            <td>100.00</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        <section class="bal-section container" id='peerList'></section>
+
+
+
+
+                                        <ul class="actions fit">
+                                            <li><button id='kakaoBtn' class="button primary fit">카카오로 요청하기</button></li>
+                                            <li><button id='messageBtn' class="button fit">문자로 요청하기</button></li>
+                                            <!--
+                                            <li><button id='kakaoBtn' style="background-color: rgb(255, 205, 0);" class="button primary fit">카카오로 요청하기</button></li>
+                                            <li><button id='messageBtn' style="background-color: rgb(112, 173, 71);" class="button primary fit">문자로 요청하기</button></li>
+                                            -->
+                                        </ul>
+										
+
+												
+												
+											</div>
+										</div>
+
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+							<!-- Search -->
+								<section id="search" class="alt">
+									<form method="post" action="#">
+										<input type="text" name="query" id="query" placeholder="Search" />
+									</form>
+								</section>
+
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Homepage</a></li>
+										<li><a href="generic.html">Generic</a></li>
+										<li><a href="elements.html">Elements</a></li>
+										<li>
+											<span class="opener">Submenu</span>
+											<ul>
+												<li><a href="#">Lorem Dolor</a></li>
+												<li><a href="#">Ipsum Adipiscing</a></li>
+												<li><a href="#">Tempus Magna</a></li>
+												<li><a href="#">Feugiat Veroeros</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Etiam Dolore</a></li>
+										<li><a href="#">Adipiscing</a></li>
+										<li>
+											<span class="opener">Another Submenu</span>
+											<ul>
+												<li><a href="#">Lorem Dolor</a></li>
+												<li><a href="#">Ipsum Adipiscing</a></li>
+												<li><a href="#">Tempus Magna</a></li>
+												<li><a href="#">Feugiat Veroeros</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Maximus Erat</a></li>
+										<li><a href="#">Sapien Mauris</a></li>
+										<li><a href="#">Amet Lacinia</a></li>
+									</ul>
+								</nav>
+
+							<!-- Section -->
+								<section>
+									<header class="major">
+										<h2>Ante interdum</h2>
+									</header>
+									<div class="mini-posts">
+										<article>
+											<a href="#" class="image"><img src="images/pic07.jpg" alt="" /></a>
+											<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore aliquam.</p>
+										</article>
+										<article>
+											<a href="#" class="image"><img src="images/pic08.jpg" alt="" /></a>
+											<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore aliquam.</p>
+										</article>
+										<article>
+											<a href="#" class="image"><img src="images/pic09.jpg" alt="" /></a>
+											<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore aliquam.</p>
+										</article>
+									</div>
+									<ul class="actions">
+										<li><a href="#" class="button">More</a></li>
+									</ul>
+								</section>
+
+							<!-- Section -->
+								<section>
+									<header class="major">
+										<h2>Get in touch</h2>
+									</header>
+									<p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
+									<ul class="contact">
+										<li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>
+										<li class="icon solid fa-phone">(000) 000-0000</li>
+										<li class="icon solid fa-home">1234 Somewhere Road #8254<br />
+										Nashville, TN 00000-0000</li>
+									</ul>
+								</section>
+
+							<!-- Footer -->
+								<footer id="footer">
+									<p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+								</footer>
+
+						</div>
+					</div>
+
+			</div>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+
+
+    <!-- Kakao JDK import & init -->
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script>Kakao.init('3d53120e2911d77e8e6bd280ac4cf71b'); // kakao javascript key</script>
+
+    <script>
+        var peer_num = 0;
+
+
+        /*
+        $("#keywordInput").blur(function() {
+
+            $.ajax({
+                url:'/searchPeer',
+                type : 'POST',
+                data : {
+					keyword : $("#keywordInput").val()
+				},
+                success:function(data){
+                    console.log(data);
+                    
+                    var aa = "";
+                    for (var i = 0; i < data.length; i++) {
+                        aa += data[i].name + ', ' + data[i].email + '\n';
+                    }
+                    alert(aa);
+                }
+            })
+
+        })
+        */
+
+
+        // peer를 검색했을 때, 검색결과(user list)를 요청
+        function onSearch(){
+            $.ajax({
+                url:'/searchPeer',
+                type : 'POST',
+                data : {
+					keyword : $("#keywordInput").val()
+				},
+                success:function(data){
+                    console.log(data);
+                    
+                    var aa = "";
+                    for (var i = 0; i < data.length; i++) {
+                        aa += data[i].name + ', ' + data[i].email + '\n';
+                    }
+                    alert(aa);
+                }
+            })
+            
+        }
+
+
+
+        // peer를 선택했을 때, 해당 user를 peerTable에 추가
+        $("#addPeer").click(function() {
+            var totalAmount = $("#totalAmount").val();
+            console.log(totalAmount);
+            peer_num++;
+            console.log(peer_num);
+
+            // db에서 user 검색하여 추가
+            peerName = '이다은'
+            dutchAmount = Math.ceil(totalAmount / (peer_num + 1))
+            $("#peerTable").append(
+                '<tbody><tr><td>' + peerName + '</td><td>Ante turpis integer aliquet porttitor.</td><td>' + dutchAmount + '</td></tr></tbody>'
+            )
+
+            
+        })
+
+
+        // kakao로 링크 공유
+        $("#kakaoBtn").click(function() {
+            Kakao.Link.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: '돈에이션 송금요청',
+                    description: 'ooo 님이 송금요청을 보냈습니다!',
+                    imageUrl:
+                        'https://postfiles.pstatic.net/MjAyMDA1MTlfMTgw/MDAxNTg5ODYyMjEyNDQy.XpPTWi2nahh_R1aGKi1sZVAD-G_EsHTWAAiXotH0Khwg.BPth2Rkp4Fab00MM1ULXQq6Ac8kXSFdx-PUcEL8hjdwg.PNG.injong032/donation.png?type=w966',
+                    link: {
+                        mobileWebUrl: 'http://192.168.200.191:3000/sendMoney',
+                        androidExecParams: 'test',
+                    },
+                },
+                buttons: [
+                    {
+                        title: '웹으로 이동',
+                        link: {
+                            mobileWebUrl: 'http://192.168.200.191:3000/sendMoney',
+                        },
+                    }
+                ],
+                success: function(response) {
+                    console.log(response);
+                },
+                fail: function(error) {
+                    console.log(error);
+                }
+            });
+        })
+        
+    </script>
+
+
+</body>
+
+</html>
