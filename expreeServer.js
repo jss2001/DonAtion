@@ -29,6 +29,74 @@ app.get('/', function (req, res) {
     res.render('index');
 })
 
+//회원가입 창
+app.get('/signup', function(req, res){
+    res.render('signup');
+})
+
+//회원가입 요청
+app.post('/signup', function(req, res){
+    //data req get db store
+    var userName = req.body.userName;
+    var userEmail = req.body.userEmail;
+    var userPassword = req.body.userPassword;
+    var userAccessToken = req.body.userAccessToken;
+    var userRefreshToken = req.body.userRefreshToken;
+    var userSeqNo = req.body.userSeqNo; 
+    console.log(userName, userAccessToken, userSeqNo);
+    var sql = "INSERT INTO fintech.user (name, email, password, accesstoken, refreshtoken, userseqno) VALUES (?,?,?,?,?,?)";
+    connection.query(sql, 
+        [userName, userEmail, userPassword, userAccessToken, userRefreshToken, userSeqNo],
+        function(err, result){
+            if(err){
+                console.error(err);
+                res.json(0);
+                throw err;
+            }
+            else{
+                res.json(1);
+            }
+        });
+
+})
+
+
+//로그인
+app.get('/login', function(req, res){
+    res.render('login');
+})
+
+app.get('/authResult',function(req, res){
+    var authCode = req.query.code;
+    console.log(authCode);
+    var option = {
+        method : "POST",
+        url : "https://testapi.openbanking.or.kr/oauth/2.0/token",
+        header : {
+            'Content-Type' : 'application/x-www-form-urlencoded',
+        },
+        form : {
+            code : authCode,
+            client_id : '9Gd2iGZ6uC8C73Sx4StubaH1UIklincOEJAnkf18',
+            client_secret : 'c3p6daWMkdGvM24WRCb0W2xdbXEqdCyGdcne7PlC',
+            redirect_uri : 'http://localhost:3000/authResult',
+            grant_type : 'authorization_code'
+        }
+    }
+    request(option, function(err, response, body){
+        if(err){
+            console.error(err);
+            throw err;
+        }
+        else{
+            var accessRequestResult = JSON.parse(body);
+            console.log(accessRequestResult);
+            res.render('resultChild', {data : accessRequestResult} )
+        }
+    })
+})
+
+
 //기부리스트
 app.get('/charityList', function(req, res) {
     var sql = "SELECT * FROM charity"
