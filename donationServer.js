@@ -10,9 +10,9 @@ var auth = require('./lib/auth')
 
 
 var connection = mysql.createConnection({
-  host     : 'fintech.cxyonwbiekau.ap-northeast-2.rds.amazonaws.com',
+  host     : 'fintech.cxyonwbiekau.ap-northeast-2.rds.amazonaws.com', //'DB-hostname을 입력해주세요',
   user     : 'fintech',
-  password : '1q2w3e4r!',
+  password : '1q2w3e4r!', //'DB-password를 입력해주세요',
   database : 'donation'
 });
  
@@ -29,6 +29,11 @@ app.use(express.urlencoded({extended:false}));//ajax로 데이터 전송하는 �
 
 // root 라우터
 app.get('/', function (req, res) {
+    res.render('index');
+})
+
+// main 라우터
+app.get('/main', function (req, res) {
     res.render('index');
 })
 

@@ -48,13 +48,13 @@
                                         <div class="col-12">
                                             <h2 id="content">더치페이 할 친구 선택</h2>
                                             <section id="search" class="alt">
-                                            
-                                                <form onsubmit="onSearch();">
-                                                    <input type="text" name="query" id='keywordInput' placeholder="Search"/>
-                                                </form>
-                                            <!--
-                                                <input type="text" name="query" id='keywordInput' placeholder="Search"/>
-                                            -->    
+                                                <input type="text" name="query" id='keywordInput' autocomplete="off" placeholder="Search"/>
+                                            </section>
+
+                                            <section>
+                                                <table id="searchResultTable">
+                                                    <!-- 검색결과 내용표시 자리 -->
+                                                </table>
                                             </section>
                                         </div>
 
@@ -63,31 +63,27 @@
                                         <button id='addPeer'>+</button>
 
 
+
                                         <div class="table-wrapper">
-                                                <table id='peerTable'>
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Name</th>
-                                                            <th>Email</th>
-                                                            <th>Price</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Name1</td>
-                                                            <td>test@test.com</td>
-                                                            <td>29.99</td>
-                                                        </tr>
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <td colspan="2"></td>
-                                                            <td>100.00</td>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                            </div>
-                                        <section class="bal-section container" id='peerList'></section>
+                                            <table id='peerTable'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Email</th>
+                                                        <th>Price</th>
+                                                    </tr>
+                                                </thead>
+                                                <!-- 사용자가 추가한 peer(더치할 친구) 목록을 보여줄 자리 -->
+                                                <tfoot>
+                                                    <tr>
+                                                        <td>Total</td>
+                                                        <td></td>
+                                                        <td id="showTotalAmount">0</td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        
 
 
 
@@ -95,17 +91,8 @@
                                         <ul class="actions fit">
                                             <li><button id='kakaoBtn' class="button primary fit">카카오로 요청하기</button></li>
                                             <li><button id='messageBtn' class="button fit">문자로 요청하기</button></li>
-                                            <!--
-                                            <li><button id='kakaoBtn' style="background-color: rgb(255, 205, 0);" class="button primary fit">카카오로 요청하기</button></li>
-                                            <li><button id='messageBtn' style="background-color: rgb(112, 173, 71);" class="button primary fit">문자로 요청하기</button></li>
-                                            -->
                                         </ul>
-										
-
-												
-												
-											</div>
-										</div>
+		
 
 								</section>
 
@@ -206,7 +193,8 @@
 
 			</div>
 
-	<!-- Scripts -->
+    
+    <!-- Scripts -->
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/browser.min.js"></script>
 	<script src="assets/js/breakpoints.min.js"></script>
@@ -219,72 +207,81 @@
     <script>Kakao.init('3d53120e2911d77e8e6bd280ac4cf71b'); // kakao javascript key</script>
 
     <script>
-        var peer_num = 0;
-
-
-        /*
-        $("#keywordInput").blur(function() {
-
-            $.ajax({
-                url:'/searchPeer',
-                type : 'POST',
-                data : {
-					keyword : $("#keywordInput").val()
-				},
-                success:function(data){
-                    console.log(data);
-                    
-                    var aa = "";
-                    for (var i = 0; i < data.length; i++) {
-                        aa += data[i].name + ', ' + data[i].email + '\n';
-                    }
-                    alert(aa);
-                }
-            })
-
+        // 전역변수
+        var totalAmount;
+        var dutchAmount;
+        
+        // 전체 금액을 입력하면 peerTable에 Total 출력
+        $("#totalAmount").blur(function() {
+            var totalAmount = $("#totalAmount").val();
+            $("#showTotalAmount").replaceWith('<td>' + totalAmount + '</td>');
         })
-        */
 
 
-        // peer를 검색했을 때, 검색결과(user list)를 요청
-        function onSearch(){
-            $.ajax({
-                url:'/searchPeer',
-                type : 'POST',
-                data : {
-					keyword : $("#keywordInput").val()
-				},
-                success:function(data){
-                    console.log(data);
-                    
-                    var aa = "";
-                    for (var i = 0; i < data.length; i++) {
-                        aa += data[i].name + ', ' + data[i].email + '\n';
-                    }
-                    alert(aa);
-                }
-            })
+        // 검색 창의 값이 변경되면, DB에 검색 요청하고 결과테이블을 보여준다.
+        var oldVal = "";
+        $("#keywordInput").on("propertychange change keyup paste input", function() {
+            var currentVal = $(this).val();
+            if(currentVal == oldVal) {
+                return;
+            }
+        
+            oldVal = currentVal;
+            console.log(currentVal);
+
             
-        }
+            if(currentVal != "") {
+                $.ajax({
+                    url:'/searchPeer',
+                    type : 'POST',
+                    data : {
+                        keyword : currentVal
+                    },
+                    success:function(data){
+                        console.log(data);
+                        
+                        var a = '<table id=\'searchResultTable\'>';
+                        for(var i = 0; i <data.length; i++) {
+                            a += '<tr onclick=\'peerClicked(this);\' style="background-color: white;" onmouseover="this.style.background=\'rgb(249, 250, 250)\'" onmouseout="this.style.background=\'white\'"><td>' + data[i].name +'</td><td>' + data[i].email + '</td></tr>'
+                        }
+                        a += '</table>';
+                        $("#searchResultTable").replaceWith(a);
 
+                    }
+                })
+            } else {
+                var a = '<table id=\'searchResultTable\'></table>';
+                $("#searchResultTable").replaceWith(a);
+            }
+            
+            
+            
+
+        });
 
 
         // peer를 선택했을 때, 해당 user를 peerTable에 추가
-        $("#addPeer").click(function() {
-            var totalAmount = $("#totalAmount").val();
-            console.log(totalAmount);
-            peer_num++;
-            console.log(peer_num);
+        var peer_num = 0;
+        function peerClicked(tr) {
+            console.log('name, email : ' + tr.cells[0].innerText + ', ' + tr.cells[1].innerText);
 
-            // db에서 user 검색하여 추가
-            peerName = '이다은'
+            totalAmount = $("#totalAmount").val();
+            console.log(totalAmount);
+
+            peer_num++;
+            console.log('peer_num: ', peer_num);
+
             dutchAmount = Math.ceil(totalAmount / (peer_num + 1))
             $("#peerTable").append(
-                '<tbody><tr><td>' + peerName + '</td><td>Ante turpis integer aliquet porttitor.</td><td>' + dutchAmount + '</td></tr></tbody>'
+                '<tbody><tr><td>' + tr.cells[0].innerText + '</td><td>' + tr.cells[1].innerText + '</td><td class=\'dutchAmount\'>' + dutchAmount + '</td></tr></tbody>'
             )
 
-            
-        })
+            var dutchAmountClass = document.getElementsByClassName('dutchAmount');
+            for (var i = 0; i < dutchAmountClass.length; i++) {
+                dutchAmountClass[i].innerHTML = dutchAmount;
+            }
+
+        }
 
 
         // kakao로 링크 공유
@@ -297,7 +294,7 @@
                     imageUrl:
                         'https://postfiles.pstatic.net/MjAyMDA1MTlfMTgw/MDAxNTg5ODYyMjEyNDQy.XpPTWi2nahh_R1aGKi1sZVAD-G_EsHTWAAiXotH0Khwg.BPth2Rkp4Fab00MM1ULXQq6Ac8kXSFdx-PUcEL8hjdwg.PNG.injong032/donation.png?type=w966',
                     link: {
-                        mobileWebUrl: 'http://192.168.200.191:3000/sendMoney',
+                        mobileWebUrl: 'http://localhost:3000/main',
                         androidExecParams: 'test',
                     },
                 },
@@ -305,7 +302,7 @@
                     {
                         title: '웹으로 이동',
                         link: {
-                            mobileWebUrl: 'http://192.168.200.191:3000/sendMoney',
+                            mobileWebUrl: 'http://localhost:3000/send?dutchAmount=' + dutchAmount
                         },
                     }
                 ],
@@ -321,6 +318,6 @@
     </script>
 
 
-</body>
+    </body>
 
 </html>
