@@ -16,10 +16,13 @@
 					<div id="main">
 						<div class="inner">
 
-							<!-- Header -->
-								<header id="header">
-									<a href="index.html" class="logo"><strong>DonAtion</strong> 생활 속 기부 플랫폼</a>
-								</header>
+				<!-- Header -->
+				<header id="header">
+					<a href="/" class="logo"><strong>DonAtion</strong> 생활 속 기부 플랫폼</a>
+					<ul class="icons">
+						<li><a href="/login" id='login' class="button primary small">sign in</a></li>
+					</ul>
+				</header>
 
 							<!-- Content -->
 								<section>
@@ -39,7 +42,13 @@
 
 									<span class="image main"><img src="<%=charity[0].image%>" alt="" /></span>
 
-									<p><%=charity[0].content%></p>
+									<br>
+									<h3><%=charity[0].subtitle1%></h3>
+									<p><%=charity[0].subcontent1%></p>
+									<br><br>
+									<h3><%=charity[0].subtitle2%></h3>
+									<p><%=charity[0].subcontent2%></p>
+									<br>
 	
 
 						
@@ -149,7 +158,28 @@
 			<script src="/assets/js/util.js"></script>
             <script src="/assets/js/main.js"></script>
             
-              
+			<script>
+				var jwtToken = sessionStorage.getItem('jwtToken')
+				var button =  document.getElementById( 'login' );
+				window.onload = function() {
+					if(jwtToken){
+						$('#login').html('sign out');
+						button.setAttribute( 'href', '/' );
+				  }
+				  else{
+					$('#login').html('sign in');
+						button.setAttribute( 'href', '/login' );
+				  }
+				}
+				$("#login").click(function(){
+					if($('#login').html() == 'sign out')
+					{
+						alert('로그아웃 되었습니다');
+						sessionStorage.clear();
+						location.reload();
+					}
+				})
+			</script>
 
 	</body>
 </html>

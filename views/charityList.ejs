@@ -21,10 +21,14 @@
 					<div id="main">
 						<div class="inner">
 
-							<!-- Header -->
-								<header id="header">
-									<a href="index.html" class="logo"><strong>DonAtion</strong>  생활 속 기부 플랫폼</a>
-								</header>
+				<!-- Header -->
+				<!-- Header -->
+				<header id="header">
+					<a href="/" class="logo"><strong>DonAtion</strong> 생활 속 기부 플랫폼</a>
+					<ul class="icons">
+						<li><a href="/login" id='login' class="button primary small">sign in</a></li>
+					</ul>
+				</header>
 
 							<!-- Section -->
 								<section>
@@ -141,8 +145,29 @@
       <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
-    <script src="js/bootstrap.min.js"></script>
-
+	<script src="js/bootstrap.min.js"></script>
+	<script>
+		var jwtToken = sessionStorage.getItem('jwtToken')
+		var button =  document.getElementById( 'login' );
+		window.onload = function() {
+			if(jwtToken){
+				$('#login').html('sign out');
+				button.setAttribute( 'href', '/' );
+		  }
+		  else{
+			$('#login').html('sign in');
+				button.setAttribute( 'href', '/login' );
+		  }
+		}
+		$("#login").click(function(){
+			if($('#login').html() == 'sign out')
+			{
+				alert('로그아웃 되었습니다');
+				sessionStorage.clear();
+				location.reload();
+			}
+        })
+	</script>
 	</body>
 </html>
 

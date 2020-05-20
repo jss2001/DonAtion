@@ -5,12 +5,14 @@ var request = require('request')
 var mysql      = require('mysql');
 var jwt = require('jsonwebtoken')
 const DATE_FORMATER = require( 'dateformat' );
+var auth = require('./lib/auth')
+
 
 
 var connection = mysql.createConnection({
-  host     : 'DB-hostname을 입력해주세요',
+  host     : 'fintech.cxyonwbiekau.ap-northeast-2.rds.amazonaws.com',
   user     : 'fintech',
-  password : 'DB-password를 입력해주세요',
+  password : '1q2w3e4r!',
   database : 'donation'
 });
  
@@ -26,7 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));//ajax로 데이터 전송하는 것을 허용
 
 // root 라우터
-app.get('/main', function (req, res) {
+app.get('/', function (req, res) {
     res.render('index');
 })
 

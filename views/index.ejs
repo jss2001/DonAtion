@@ -25,7 +25,10 @@
 
 				<!-- Header -->
 				<header id="header">
-					<a href="/main" class="logo"><strong>DonAtion</strong> 생활 속 기부 플랫폼</a>
+					<a href="/" class="logo"><strong>DonAtion</strong> 생활 속 기부 플랫폼</a>
+					<ul class="icons">
+						<li><a href="/login" id='login' class="button primary small">sign in</a></li>
+					</ul>
 				</header>
 
 				<!-- Banner -->
@@ -44,7 +47,7 @@
 							간편한 기부의 방법이 될 수 있다는 생각에 돈에이션(DonAtion)을 기획하게 되었다.</p>
 					</div>
 					<span class="image object">
-						<img src="images/pic10.jpg" alt="" />
+						<img src="images/donationimg.jpg" alt="" />
 					</span>
 				</section>
 
@@ -58,8 +61,7 @@
 							<span class="icon fa-gem"></span>
 							<div class="content">
 								<h3><a href="/dutchRequest">더치페이</a></h3>
-								<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam
-									facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
+								<p>함께 결제한 금액을 손쉽게 더치페이해보아요.</p>
 							</div>
 						</article>
 						<article>
@@ -73,17 +75,15 @@
 						<article>
 							<span class="icon solid fa-rocket"></span>
 							<div class="content">
-								<h3>Quam lorem ipsum</h3>
-								<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam
-									facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
+								<h3><a href="/dutchRequest">나의 기부현황</a></h3>
+								<p>나의 기부현황을 확인하면서 뿌듯함을 느껴봅시다.</p>
 							</div>
 						</article>
 						<article>
 							<span class="icon solid fa-signal"></span>
 							<div class="content">
 								<h3><a href="/charityList">기부처 리스트</a></h3>
-								<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin aliquam
-									facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
+								<p>도움의 손길이 필요한 많은 곳들이 있습니다.</p>
 							</div>
 						</article>
 					</div>
@@ -168,12 +168,38 @@
 
 	</div>
 
+
 	<!-- Scripts -->
 	<script src="/assets/js/jquery.min.js"></script>
 	<script src="/assets/js/browser.min.js"></script>
 	<script src="/assets/js/breakpoints.min.js"></script>
 	<script src="/assets/js/util.js"></script>
 	<script src="/assets/js/main.js"></script>
+	
+	<script>
+		var jwtToken = sessionStorage.getItem('jwtToken')
+		var button =  document.getElementById( 'login' );
+		window.onload = function() {
+			if(jwtToken){
+				$('#login').html('sign out');
+				button.setAttribute( 'href', '/' );
+		  }
+		  else{
+			$('#login').html('sign in');
+				button.setAttribute( 'href', '/login' );
+		  }
+		}
+		$("#login").click(function(){
+			if($('#login').html() == 'sign out')
+			{
+				alert('로그아웃 되었습니다');
+				sessionStorage.clear();
+				location.reload();
+			}
+        })
+	</script>
+
+
 
 </body>
 
