@@ -58,12 +58,6 @@
                                             </section>
                                         </div>
 
-
-                                        <!-- 임시버튼 -->
-                                        <button id='addPeer'>+</button>
-
-
-
                                         <div class="table-wrapper">
                                             <table id='peerTable'>
                                                 <thead>
@@ -210,11 +204,40 @@
         // 전역변수
         var totalAmount;
         var dutchAmount;
+        var userinfo;
+
+
+        var jwtToken = sessionStorage.getItem('jwtToken')
+        
+		if(!jwtToken){
+			alert("로그인이 필요합니다!");
+			window.location.href = '/login';
+		}
+        fetchUserData();
+        function fetchUserData(){
+            $.ajax({
+                url:'http://localhost:3000/dutchRequest',
+                type : 'POST',
+                headers : {
+                    'ourtoken' : jwtToken
+                },
+                success:function(data){
+                    userinfo = data[0];
+                }
+            })
+        }
+    
+        
         
         // 전체 금액을 입력하면 peerTable에 Total 출력
         $("#totalAmount").blur(function() {
             var totalAmount = $("#totalAmount").val();
             $("#showTotalAmount").replaceWith('<td>' + totalAmount + '</td>');
+
+            // 사용자 정보 peerTable에 추가
+            $("#peerTable").append(
+                '<tbody><tr><td>' + userinfo.name + '</td><td>' + userinfo.email + '</td><td class=\'dutchAmount\'>' + totalAmount + '</td></tr></tbody>'
+            )
         })
 
 
@@ -254,31 +277,36 @@
                 $("#searchResultTable").replaceWith(a);
             }
             
-            
-            
 
         });
 
 
+
         // peer를 선택했을 때, 해당 user를 peerTable에 추가
         var peer_num = 0;
+        var peer_list = [];
         function peerClicked(tr) {
             console.log('name, email : ' + tr.cells[0].innerText + ', ' + tr.cells[1].innerText);
 
             totalAmount = $("#totalAmount").val();
             console.log(totalAmount);
 
-            peer_num++;
-            console.log('peer_num: ', peer_num);
 
-            dutchAmount = Math.ceil(totalAmount / (peer_num + 1))
-            $("#peerTable").append(
-                '<tbody><tr><td>' + tr.cells[0].innerText + '</td><td>' + tr.cells[1].innerText + '</td><td class=\'dutchAmount\'>' + dutchAmount + '</td></tr></tbody>'
-            )
+            if (peer_list.indexOf(tr.cells[1]) == -1) {
+                peer_list.push(tr.cells[1])
 
-            var dutchAmountClass = document.getElementsByClassName('dutchAmount');
-            for (var i = 0; i < dutchAmountClass.length; i++) {
-                dutchAmountClass[i].innerHTML = dutchAmount;
+                peer_num++;
+                console.log('peer_num: ', peer_num);
+
+                dutchAmount = Math.ceil(totalAmount / (peer_num + 1))
+                $("#peerTable").append(
+                    '<tbody><tr><td>' + tr.cells[0].innerText + '</td><td>' + tr.cells[1].innerText + '</td><td class=\'dutchAmount\'>' + dutchAmount + '</td></tr></tbody>'
+                )
+
+                var dutchAmountClass = document.getElementsByClassName('dutchAmount');
+                for (var i = 0; i < dutchAmountClass.length; i++) {
+                    dutchAmountClass[i].innerHTML = dutchAmount;
+                }
             }
 
         }
@@ -290,7 +318,7 @@
                 objectType: 'feed',
                 content: {
                     title: '돈에이션 송금요청',
-                    description: 'ooo 님이 송금요청을 보냈습니다!',
+                    description: userinfo.name + '님이 송금요청을 보냈습니다!',
                     imageUrl:
                         'https://postfiles.pstatic.net/MjAyMDA1MTlfMTgw/MDAxNTg5ODYyMjEyNDQy.XpPTWi2nahh_R1aGKi1sZVAD-G_EsHTWAAiXotH0Khwg.BPth2Rkp4Fab00MM1ULXQq6Ac8kXSFdx-PUcEL8hjdwg.PNG.injong032/donation.png?type=w966',
                     link: {
@@ -302,7 +330,7 @@
                     {
                         title: '웹으로 이동',
                         link: {
-                            mobileWebUrl: 'http://localhost:3000/send?dutchAmount=' + dutchAmount
+                            mobileWebUrl: 'http://localhost:3000/send?dutchAmount=' + dutchAmount + '&user_id=' + userinfo.id
                         },
                     }
                 ],

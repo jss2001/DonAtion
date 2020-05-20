@@ -165,6 +165,24 @@ app.get('/dutchRequest', function(req, res) {
     res.render('dutchRequest');
 })
 
+
+// dutchRequest : 더치페이 요청 사용자 정보 요청
+app.post('/dutchRequest', auth, function(req, res) {
+        var userId = req.decoded.userId;
+        var sql = "SELECT * FROM user WHERE id = ?"
+        connection.query(sql, [userId], function(err, result){
+            if(err){
+                console.error(err);
+                throw err;
+            }
+            else{
+                console.log(result);
+                res.json(result);
+            }
+        })
+})
+    
+
 // searchPeer: 사용자 정보 검색
 app.post('/searchPeer', function(req, res) {
     var keyword = '%' + req.body.keyword + '%'
