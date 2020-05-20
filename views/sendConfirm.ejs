@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+	<title>더치페이 송금하기 확인페이지</title>
+
+	<!-- Google font file. If you want you can change. -->
+	<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,900" rel="stylesheet">
+
+    <!-- 플젝 css -->
+    <link rel="stylesheet" type="text/css" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+
+	<!-- Template global css file. Requared all pages -->
+	<link rel="stylesheet" type="text/css" href="css/global.style.css">
+
+
+</head>
+
+<body>
+	
+	<div class="wrapper ">
+		
+		<div class="wrapper-inline">
+		
+			<!-- Header area end -->
+
+			<!-- Page content start -->
+			<main class="margin mt-0">
+
+			
+
+				<section class="wallets-list container">
+					<h4 class="title-main">더치페이 송금하기</h4>
+					<div class="wallet-address" style="border-radius: 0 0 0 0;">
+                    
+
+                       
+    <!-- 기부금액 시작 -->
+                        <div class="txt-left calc-crr" >
+                            <label class="g-text">보낼 계좌번호 확인</label>
+                            <div class="form-row-group with-icons">
+                                <div class="form-row no-padding">
+                                    <img src="img/content/2.png" class="icon" alt="">
+                                    <input type="text" id="account_num" name="aaaa" class="form-element" placeholder="1234-5678" vlaue="" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-mini-divider"></div>
+                        <div class="txt-left calc-crr" >
+                            <label class="g-text">최종금액확인하기</label>
+                            <div class="form-row-group with-icons">
+                                <div class="form-row no-padding">
+                                    <img src="img/content/2.png" class="icon" alt="">
+                                    <input type="text" id="price_result" name="aaaa" class="form-element" placeholder="0 원"  readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-mini-divider"></div>
+                    	<div class="txt-left calc-crr">
+                    		<label class="g-text">더치페이 금액</label>
+	                    	<div class="form-row-group with-icons">
+								<div class="form-row no-padding">
+									<img src="img/content/2.png" class="icon" alt="">
+									<input type="text" id="transfer_leader" name="aaa" class="form-element" placeholder="0 원" readonly>
+								</div>
+							</div>
+                    	</div>
+                        
+                        <div class="form-mini-divider"></div>
+                        <div class="txt-left calc-crr">
+                    		<label class="g-text">기부할 금액</label>
+	                    	<div class="form-row-group with-icons">
+								<div class="form-row no-padding">
+									<img src="img/content/2.png" class="icon" alt="">
+									<input type="text"  id="donation_money" name="aaa" class="form-element" placeholder="0 원" readonly>
+								</div>
+                            </div>
+                                
+                        </div>
+                        
+                       
+
+                        <div class="form-mini-divider"></div>
+                        
+                       
+                       
+
+                    	<div style="margin-top:20px;"><a href="#" class="button primary fit">송금하기</a></div>
+ 	<!-- 기부금액 끝 -->                   	    
+                    </div>
+
+					
+				</section>
+
+			   
+
+
+
+	<!-- JQuery library file. requared all pages -->
+    <script src="js/jquery.min.js"></script>
+    
+    <!--복잡해서 따로 뺌 -->
+    <script src="js/send.js"></script>
+
+
+	<!-- Swiper JS -->
+    <script src="js/main.js"></script>
+    <script src="js/browser.min.js"></script>
+    <script src="js/breakpoints.min.js"></script>
+	<!-- Template global script file. requared all pages -->
+	<script src="js/util.js"></script>
+
+
+    <script>
+        
+        
+        console.log(getParam("price_transfer"));
+        console.log(getParam("price_donation"));
+
+        $(document).ready(function() {
+            getParam();
+            
+            var price_transfer=getParam("price_transfer");
+            var price_donation=getParam("price_donation");
+            console.log(price_transfer);
+
+            $('#transfer_leader').val(price_transfer);
+            $('#donation_money').val(price_donation);
+            
+            var sum = parseInt($("#transfer_leader").val()) + parseInt($("#donation_money").val())
+            $('#price_result').val(sum);
+        });
+
+     
+            
+
+ 
+
+
+    </script>
+
+
+</body>
+
+</html>
