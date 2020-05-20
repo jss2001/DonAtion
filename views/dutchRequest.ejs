@@ -23,7 +23,7 @@
 				<header id="header">
 					<a href="/" class="logo"><strong>DonAtion</strong> 생활 속 기부 플랫폼</a>
 					<ul class="icons">
-						<li><a href="/login" class="button primary small">login</a></li>
+						<li><a href="/login" id='login' class="button primary small">sign in</a></li>
 					</ul>
 				</header>
 
@@ -33,7 +33,16 @@
 										<h1>더치페이 요청하기</h1>
 									</header>
 
-									    <!-- Content -->
+                                        <!-- Content -->
+                                        <h2 id="content">계좌번호 선택</h2>
+                                        <div class="col-12">
+                                            <select name="demo-category" id="accountSelect">
+                                                <option value="">- 계좌번호 -</option>
+                                            </select>
+                                        </div>
+
+                                        <br><br>
+
                                         <h2 id="content">금액을 입력해주세요</h2>
                                         <div class="col-12">
                                             <div class="col-6 col-12-xsmall">
@@ -205,6 +214,8 @@
         var totalAmount;
         var dutchAmount;
         var userinfo;
+        var peer_list = [];
+        //var accountList;
 
 
         var jwtToken = sessionStorage.getItem('jwtToken')
@@ -212,7 +223,9 @@
 		if(!jwtToken){
 			alert("로그인이 필요합니다!");
 			window.location.href = '/login';
-		}
+        }
+        
+        //사용자 정보 및 계좌정보 옵션 출력
         fetchUserData();
         function fetchUserData(){
             $.ajax({
@@ -222,22 +235,57 @@
                     'ourtoken' : jwtToken
                 },
                 success:function(data){
-                    userinfo = data[0];
+                    userinfo = data.result[0];
+                    accountList = data.accessRequestResult;
+                    for(var i=0; i < accountList.res_list.length; i++){
+                        $("#accountSelect").append(
+                            '<option value="'+i+'">'+ accountList.res_list[i].account_alias +' '+ accountList.res_list[i].account_num_masked+'</option>'
+                        )
+                    } 
+                    
                 }
             })
         }
+
+
+
+
     
-        
+        var jwtToken = sessionStorage.getItem('jwtToken')
+		var button =  document.getElementById( 'login' );
+		window.onload = function() {
+			if(jwtToken){
+				$('#login').html('sign out');
+				button.setAttribute( 'href', '/' );
+		  }
+		  else{
+			$('#login').html('sign in');
+				button.setAttribute( 'href', '/login' );
+		  }
+		}
+		$("#login").click(function(){
+			if($('#login').html() == 'sign out')
+			{
+				alert('로그아웃 되었습니다');
+				sessionStorage.clear();
+				location.reload();
+			}
+        })
+
+
         
         // 전체 금액을 입력하면 peerTable에 Total 출력
         $("#totalAmount").blur(function() {
-            var totalAmount = $("#totalAmount").val();
+            totalAmount = $("#totalAmount").val();
             $("#showTotalAmount").replaceWith('<td>' + totalAmount + '</td>');
 
             // 사용자 정보 peerTable에 추가
-            $("#peerTable").append(
-                '<tbody><tr><td>' + userinfo.name + '</td><td>' + userinfo.email + '</td><td class=\'dutchAmount\'>' + totalAmount + '</td></tr></tbody>'
-            )
+            if (peer_list.indexOf(userinfo.email) == -1) {
+                peer_list.push(userinfo.email);
+                $("#peerTable").append(
+                    '<tbody><tr><td>' + userinfo.name + '</td><td>' + userinfo.email + '</td><td class=\'dutchAmount\'>' + totalAmount + '</td></tr></tbody>'
+                )
+            }
         })
 
 
@@ -284,7 +332,6 @@
 
         // peer를 선택했을 때, 해당 user를 peerTable에 추가
         var peer_num = 0;
-        var peer_list = [];
         function peerClicked(tr) {
             console.log('name, email : ' + tr.cells[0].innerText + ', ' + tr.cells[1].innerText);
 
@@ -311,9 +358,11 @@
 
         }
 
-
         // kakao로 링크 공유
         $("#kakaoBtn").click(function() {
+            //선택된 계좌정보 가져오기
+            var i = $("#accountSelect option:selected").val();
+            fintech_use_num = accountList.res_list[i].fintech_use_num
             Kakao.Link.sendDefault({
                 objectType: 'feed',
                 content: {
@@ -330,8 +379,9 @@
                     {
                         title: '웹으로 이동',
                         link: {
-                            mobileWebUrl: 'http://localhost:3000/send?dutchAmount=' + dutchAmount + '&user_id=' + userinfo.id
+                            mobileWebUrl: 'http://localhost:3000/send?dutchAmount=' + dutchAmount + '&user_id=' + userinfo.id + '&host_use_num=' + fintech_use_num
                         },
+                        
                     }
                 ],
                 success: function(response) {

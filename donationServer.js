@@ -168,18 +168,45 @@ app.get('/dutchRequest', function(req, res) {
 
 // dutchRequest : 더치페이 요청 사용자 정보 요청
 app.post('/dutchRequest', auth, function(req, res) {
-        var userId = req.decoded.userId;
-        var sql = "SELECT * FROM user WHERE id = ?"
-        connection.query(sql, [userId], function(err, result){
-            if(err){
-                console.error(err);
-                throw err;
+    var userId = req.decoded.userId;
+     var sql = "SELECT * FROM user WHERE id = ?"
+     connection.query(sql, [userId], function(err, result){
+         if(err){
+             console.error(err);
+             throw err;
+         }
+         else{
+
+     var option = {
+         method : "GET",
+         url : "https://testapi.openbanking.or.kr/v2.0/user/me",
+         headers : {
+             Authorization : 'Bearer ' + result[0].accesstoken
+         },
+         qs : {
+             user_seq_no : result[0].userseqno
+         }
+     }
+     console.log(option);
+     request(option, function(err, response, body){
+         if(err){
+             console.error(err);
+             throw err;
+         }
+         else {
+            var accessRequestResult = JSON.parse(body);
+            console.log(accessRequestResult);
+            var reusultAll = {
+                result : result,
+                accessRequestResult : accessRequestResult
             }
-            else{
-                console.log(result);
-                res.json(result);
-            }
-        })
+            console.log(reusultAll);
+            res.json(reusultAll);
+         }
+     })
+         }
+     })
+
 })
     
 
@@ -245,6 +272,15 @@ app.get('/charityDetail/:charityid', function(req, res) {
         }
     })
 })
+
+
+
+//------------------ 요청받은 더치페이 금액 송금 ------------------//
+//http://localhost:3000/send?dutchAmount=2000&user_id=2
+app.get('/sendConfirm',function(req,res){
+    res.render('sendConfirm');
+})
+
 
 
 app.listen(3000);
